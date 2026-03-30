@@ -100,7 +100,7 @@ English:
 Or just run:
 
 ```bash
-cd /root/projects/vnc-watch
+cd /path/to/vnc-watch
 ./run.sh
 ```
 
@@ -111,7 +111,7 @@ machines where direct journal access is restricted.
 If tray startup fails, inspect:
 
 ```bash
-tail -n 50 /root/projects/vnc-watch/logs/tray-start.log
+tail -n 50 /path/to/vnc-watch/logs/tray-start.log
 ```
 
 If GTK tray support is unavailable on the target machine, `run.sh` falls back
@@ -120,7 +120,7 @@ to a background watcher without tray icon and keeps desktop notifications.
 To create a launcher on the desktop with absolute paths:
 
 ```bash
-cd /root/projects/vnc-watch
+cd /path/to/vnc-watch
 ./install-desktop-launcher.sh
 ```
 
@@ -147,14 +147,14 @@ chmod +x setup.sh
 To build one portable installer file:
 
 ```bash
-cd /root/projects/vnc-watch
+cd /path/to/vnc-watch
 ./build-installer.sh
 ```
 
 The result will be:
 
 ```bash
-/root/projects/vnc-watch/dist/vnc-watch-installer.run
+/path/to/vnc-watch/dist/vnc-watch-installer.run
 ```
 
 On another machine:
@@ -172,13 +172,13 @@ This creates two desktop launchers:
 ## Show recent parsed events
 
 ```bash
-tail -n 50 /root/projects/vnc-watch/logs/events.jsonl
+tail -n 50 /path/to/vnc-watch/logs/events.jsonl
 ```
 
 Or:
 
 ```bash
-cd /root/projects/vnc-watch
+cd /path/to/vnc-watch
 ./tail-log.sh
 ```
 
@@ -193,7 +193,7 @@ the unit:
 
 ```bash
 mkdir -p ~/project
-cp -r /root/projects/vnc-watch ~/project/
+cp -r /path/to/vnc-watch ~/project/
 mkdir -p ~/.config/systemd/user
 cp ~/project/vnc-watch/vnc-watch.service ~/.config/systemd/user/
 systemctl --user daemon-reload
