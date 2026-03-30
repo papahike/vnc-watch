@@ -6,6 +6,69 @@ It follows `journalctl -u x11vnc -f`, extracts useful events, writes them to a
 local JSONL history file, and can show desktop notifications with
 `notify-send`.
 
+## Description RU
+
+`vnc-watch` helps answer questions like:
+
+- кто подключался к моему ПК
+- кто подключался по удаленке
+- как посмотреть подключения к компьютеру
+- как узнать кто заходил через VNC
+- как отследить удаленные подключения к рабочему ПК
+- Remmina мониторинг подключений
+- аудит удаленного доступа на RedOS
+
+Проект ориентирован на `RedOS` и `x11vnc`/`VNC`. Он показывает входящие
+подключения к рабочему столу, ошибки аутентификации, успешные сессии и
+отключения клиентов. Полезен для сценариев с `Remmina`, локальной сетью,
+корпоративной сетью и общим мониторингом удаленного доступа. Из коробки
+проект мониторит `VNC/x11vnc`; для `RDP/xrdp` его можно адаптировать под
+другой источник журналов.
+
+## Description EN
+
+`vnc-watch` is a lightweight remote desktop connection monitor for `RedOS`
+systems using `x11vnc`. It helps answer questions such as:
+
+- who connected to my computer
+- who connected remotely to my PC
+- how to see who connected over VNC
+- how to monitor Remmina remote desktop sessions
+- how to audit remote desktop access on Linux
+- how to track incoming VNC connections
+
+The tool watches `x11vnc` logs, records connection attempts, failed
+authentication, successful VNC sessions, and disconnects. It is useful for
+remote access auditing, workstation monitoring, and notification-based tracking
+of incoming desktop sessions. The current implementation targets `VNC/x11vnc`;
+`RDP/xrdp` support would require a different log source.
+
+## Search Keywords
+
+Russian:
+- кто подключался к пк
+- кто подключался к моему компьютеру
+- кто подключался по удаленке
+- посмотреть удаленные подключения
+- журнал удаленных подключений linux
+- журнал подключений remmina
+- мониторинг vnc redos
+- мониторинг удаленного рабочего стола
+- аудит подключений vnc
+- remmina vnc лог подключений
+
+English:
+- who connected to my pc
+- who connected remotely to my computer
+- VNC connection monitor Linux
+- Remmina connection monitor
+- remote desktop access audit
+- x11vnc session monitor
+- VNC login notifications
+- remote support connection history
+- desktop sharing audit log
+- RedOS VNC monitoring
+
 ## What it detects
 
 - incoming connection attempt
