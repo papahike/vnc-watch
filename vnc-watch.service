@@ -1,0 +1,13 @@
+[Unit]
+Description=Watch x11vnc connections and show alerts
+After=default.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/project/vnc-watch
+ExecStart=/usr/bin/python3 %h/project/vnc-watch/vnc_watch.py --notify
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target

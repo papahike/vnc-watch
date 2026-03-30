@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Мониторинг VNC
+Comment=Следить за подключениями x11vnc и показывать уведомления
+Terminal=true
+Exec=/bin/bash -lc 'SCRIPT_DIR="$(dirname "%k")"; cd "$SCRIPT_DIR"; exec ./launch-monitor.sh'
+Icon=utilities-terminal
+Categories=Utility;Monitor;

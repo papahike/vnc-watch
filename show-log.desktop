@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Лог VNC
+Comment=Показать последние события VNC
+Terminal=true
+Exec=/bin/bash -lc 'SCRIPT_DIR="$(dirname "%k")"; cd "$SCRIPT_DIR"; exec ./launch-log.sh'
+Icon=text-x-log
+Categories=Utility;Monitor;
