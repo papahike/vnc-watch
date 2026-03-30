@@ -21,6 +21,7 @@ chmod +x \
   tail-log.sh \
   launch-monitor.sh \
   launch-log.sh \
+  pkexec-journalctl.sh \
   install-desktop-launcher.sh \
   vnc-watch.desktop \
   show-log.desktop \
@@ -29,7 +30,7 @@ chmod +x \
   show_log.py
 
 MISSING=0
-for cmd in bash python3 journalctl sudo; do
+for cmd in bash python3 journalctl pkexec mkfifo; do
   check_command "$cmd" || MISSING=1
 done
 

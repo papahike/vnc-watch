@@ -16,9 +16,10 @@ local JSONL history file, and can show desktop notifications with
 ## Files
 
 - `vnc_watch.py`: main watcher
-- `run.sh`: start watcher with `sudo journalctl` and desktop notifications
+- `run.sh`: start watcher and request privileged journal access through `pkexec`
 - `launch-monitor.sh`: open terminal and start monitoring interactively
 - `launch-log.sh`: open terminal and show readable history
+- `pkexec-journalctl.sh`: privileged helper started through polkit
 - `setup.sh`: one-step bootstrap for another machine
 - `build-installer.sh`: build a self-extracting `.run` installer
 - `NOTEBOOK_QUICKSTART_RU.md`: short Russian checklist for laptop rollout
@@ -33,22 +34,6 @@ local JSONL history file, and can show desktop notifications with
 
 ## Run manually
 
-```bash
-cd /root/projects/vnc-watch
-python3 vnc_watch.py --notify
-```
-
-If the current user cannot read the journal for `x11vnc`, run it with `sudo`
-or add the user to a group with journal access.
-
-On systems where only `sudo journalctl` can read `x11vnc` logs, use this
-instead so notifications still appear in your own desktop session:
-
-```bash
-cd /root/projects/vnc-watch
-sudo journalctl -u x11vnc -f -n 0 --no-pager --output short-iso | python3 vnc_watch.py --notify --stdin
-```
-
 Or just run:
 
 ```bash
@@ -56,8 +41,9 @@ cd /root/projects/vnc-watch
 ./run.sh
 ```
 
-`run.sh` asks for the sudo password once, then starts monitoring in the tray and
-returns control to the desktop.
+`run.sh` starts the watcher and then requests privileged access to `journalctl`
+through `pkexec`. A graphical administrator password prompt is expected on
+machines where direct journal access is restricted.
 
 If tray startup fails, inspect:
 

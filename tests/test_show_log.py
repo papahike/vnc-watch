@@ -27,8 +27,8 @@ def test_show_log_prints_recent_readable_events(tmp_path, monkeypatch, capsys) -
         history,
         Event(
             kind="connect_attempt",
-            ip="10.12.4.252",
-            raw_line="2026-03-30T11:35:48+0500 Got connection from client 10.12.4.252",
+            ip="198.51.100.25",
+            raw_line="2026-03-30T11:35:48+0500 Got connection from client 198.51.100.25",
             timestamp="2026-03-30T11:35:48+0500",
         ),
     )
@@ -36,8 +36,8 @@ def test_show_log_prints_recent_readable_events(tmp_path, monkeypatch, capsys) -
         history,
         Event(
             kind="session_established",
-            ip="10.12.4.252",
-            raw_line="2026-03-30T11:35:57+0500 client_set_net: 10.12.4.252 0.0189",
+            ip="198.51.100.25",
+            raw_line="2026-03-30T11:35:57+0500 client_set_net: 198.51.100.25 0.0189",
             timestamp="2026-03-30T11:35:57+0500",
         ),
     )
@@ -53,5 +53,5 @@ def test_show_log_prints_recent_readable_events(tmp_path, monkeypatch, capsys) -
     assert result == 0
     assert "Последние события VNC" in captured.out
     assert "Подключение установлено" in captured.out
-    assert "10.12.4.252" in captured.out
+    assert "198.51.100.25" in captured.out
     assert "Всего событий в истории: 2" in captured.out

@@ -43,7 +43,7 @@ def test_notification_urgency_maps_expected_levels() -> None:
 def test_maybe_notify_invokes_notify_send(monkeypatch) -> None:
     event = vnc_watch.Event(
         kind="session_established",
-        ip="11.0.0.21",
+        ip="203.0.113.21",
         raw_line="raw",
         timestamp="2026-03-30T12:09:57+0500",
     )
@@ -66,7 +66,7 @@ def test_maybe_notify_invokes_notify_send(monkeypatch) -> None:
         "-t",
         "0",
         "VNC: подключение установлено",
-        "Установлено VNC-подключение от 11.0.0.21",
+        "Установлено VNC-подключение от 203.0.113.21",
     ]]
 
 
@@ -76,12 +76,12 @@ def test_main_reads_stdin_writes_history_and_prints(tmp_path, monkeypatch, capsy
         [
             (
                 "2026-03-30T12:07:35+0500 host x11vnc[1385]: "
-                "30/03/2026 12:07:35 Got connection from client 11.0.0.21"
+                "30/03/2026 12:07:35 Got connection from client 203.0.113.21"
             ),
             "unrelated line",
             (
                 "2026-03-30T12:09:57+0500 host x11vnc[1385]: "
-                "30/03/2026 12:09:57 client_set_net: 11.0.0.21  0.0019"
+                "30/03/2026 12:09:57 client_set_net: 203.0.113.21  0.0019"
             ),
             "",
         ]
@@ -103,7 +103,7 @@ def test_main_reads_stdin_writes_history_and_prints(tmp_path, monkeypatch, capsy
     captured = capsys.readouterr()
 
     assert result == 0
-    assert "[connect_attempt] 11.0.0.21" in captured.out
-    assert "[session_established] 11.0.0.21" in captured.out
+    assert "[connect_attempt] 203.0.113.21" in captured.out
+    assert "[session_established] 203.0.113.21" in captured.out
     lines = history.read_text(encoding="utf-8").strip().splitlines()
     assert len(lines) == 2

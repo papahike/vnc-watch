@@ -27,6 +27,7 @@ copy_file build-installer.sh
 copy_file install-desktop-launcher.sh
 copy_file launch-log.sh
 copy_file launch-monitor.sh
+copy_file pkexec-journalctl.sh
 copy_file run.sh
 copy_file setup.sh
 copy_file show-log.desktop
