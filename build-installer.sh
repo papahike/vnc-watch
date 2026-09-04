@@ -12,33 +12,28 @@ rm -rf "$PAYLOAD_DIR"
 mkdir -p "$PAYLOAD_DIR"
 
 copy_file() {
-  local src="$1"
-  cp "$SCRIPT_DIR/$src" "$PAYLOAD_DIR/$src"
-}
-
-copy_tree() {
-  local src="$1"
-  mkdir -p "$PAYLOAD_DIR/$src"
-  cp -r "$SCRIPT_DIR/$src/." "$PAYLOAD_DIR/$src/"
+  local source_path="$1"
+  cp "$SCRIPT_DIR/$source_path" "$PAYLOAD_DIR/$source_path"
 }
 
 copy_file README.md
+copy_file NOTEBOOK_QUICKSTART_RU.md
 copy_file build-installer.sh
-copy_file install-desktop-launcher.sh
-copy_file launch-log.sh
-copy_file launch-monitor.sh
-copy_file pkexec-journalctl.sh
-copy_file run.sh
 copy_file setup.sh
-copy_file show-log.desktop
-copy_file show_log.py
+copy_file install-desktop-launcher.sh
+copy_file run.sh
+copy_file sudo-askpass.sh
+copy_file autostart.sh
+copy_file launch-monitor.sh
+copy_file launch-log.sh
 copy_file tail-log.sh
 copy_file vnc-watch.desktop
-copy_file vnc-watch.service
+copy_file show-log.desktop
+copy_file vnc-watch-autostart.desktop
 copy_file vnc_tray.py
 copy_file vnc_watch.py
+copy_file show_log.py
 copy_file watchlib.py
-copy_tree tests
 
 tar -C "$PAYLOAD_DIR" -czf "$ARCHIVE_PATH" .
 
@@ -51,7 +46,7 @@ mkdir -p "$TARGET_DIR"
 
 ARCHIVE_LINE="$(awk '/^__ARCHIVE_BELOW__$/ {print NR + 1; exit 0;}' "$0")"
 if [[ -z "${ARCHIVE_LINE:-}" ]]; then
-  echo "Installer payload marker not found."
+  echo "Installer payload marker not found." >&2
   exit 1
 fi
 
@@ -70,4 +65,4 @@ EOF
 cat "$ARCHIVE_PATH" >>"$OUTPUT_PATH"
 chmod +x "$OUTPUT_PATH"
 
-echo "Built installer: $OUTPUT_PATH"
+echo "Готовый установщик: $OUTPUT_PATH"

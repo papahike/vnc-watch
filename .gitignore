@@ -1,4 +1,10 @@
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
 logs/
 dist/
+*.tar.gz

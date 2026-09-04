@@ -17,6 +17,12 @@ gi.require_version("Notify", "0.7")
 
 from gi.repository import GLib, Gtk, Notify  # noqa: E402
 
+try:
+    gi.require_version("AppIndicator3", "0.1")
+    from gi.repository import AppIndicator3  # type: ignore[attr-defined]  # noqa: E402
+except (ImportError, ValueError):
+    AppIndicator3 = None  # type: ignore[assignment,misc]
+
 from watchlib import Event, append_event, format_event_line, kind_label, kind_summary, load_events, parse_event
 
 
@@ -43,6 +49,7 @@ def parse_args() -> argparse.Namespace:
 class TrayApp:
     def __init__(self, history_file: Path, lock_file: Path) -> None:
         self.history_file = history_file
+        self.input_stream_closed = False
         history_file.parent.mkdir(parents=True, exist_ok=True)
         self.recent_events: list[Event] = []
         self.lock_handle = lock_file.open("w", encoding="utf-8")
@@ -51,14 +58,26 @@ class TrayApp:
 
         Notify.init("vnc-watch")
 
-        self.status_icon = Gtk.StatusIcon.new_from_icon_name("network-idle")
-        self.status_icon.set_title("VNC Watch")
-        self.status_icon.set_tooltip_text("VNC Watch: мониторинг активен")
-        self.status_icon.set_visible(True)
-        self.status_icon.connect("popup-menu", self.on_popup_menu)
-        self.status_icon.connect("activate", self.on_activate)
-
         self.menu = self.build_menu()
+        self.status_icon: Gtk.StatusIcon | None = None
+        self.indicator = None
+
+        if AppIndicator3 is not None:
+            self.indicator = AppIndicator3.Indicator.new(
+                "vnc-watch",
+                "network-idle",
+                AppIndicator3.IndicatorCategory.SYSTEM_SERVICES,
+            )
+            self.indicator.set_title("VNC Watch: мониторинг активен")
+            self.indicator.set_menu(self.menu)
+            self.indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
+        else:
+            self.status_icon = Gtk.StatusIcon.new_from_icon_name("network-idle")
+            self.status_icon.set_title("VNC Watch")
+            self.status_icon.set_tooltip_text("VNC Watch: мониторинг активен")
+            self.status_icon.set_visible(True)
+            self.status_icon.connect("popup-menu", self.on_popup_menu)
+            self.status_icon.connect("activate", self.on_activate)
 
     def load_recent_history(self) -> None:
         for payload in load_events(self.history_file)[-20:]:
@@ -124,7 +143,11 @@ class TrayApp:
         self.recent_events.append(event)
         self.recent_events = self.recent_events[-50:]
         append_event(self.history_file, event)
-        self.status_icon.set_tooltip_text(f"{kind_label(event.kind)}: {event.ip or '-'}")
+        status_text = f"{kind_label(event.kind)}: {event.ip or '-'}"
+        if self.indicator is not None:
+            self.indicator.set_title(status_text)
+        elif self.status_icon is not None:
+            self.status_icon.set_tooltip_text(status_text)
 
         notification = Notify.Notification.new(
             notification_title(event.kind),
@@ -138,12 +161,19 @@ class TrayApp:
     def quit_app(self, _item: Gtk.MenuItem | None) -> None:
         Gtk.main_quit()
 
+    def handle_input_closed(self) -> bool:
+        """Close the tray if its journal reader disappeared unexpectedly."""
+        self.input_stream_closed = True
+        Gtk.main_quit()
+        return GLib.SOURCE_REMOVE
+
 
 def stdin_worker(app: TrayApp) -> None:
     for line in sys.stdin:
         event = parse_event(line.rstrip("\n"))
         if event:
             GLib.idle_add(app.handle_event, event)
+    GLib.idle_add(app.handle_input_closed)
 
 
 def notification_urgency(kind: str) -> Notify.Urgency:
@@ -183,7 +213,7 @@ def main() -> int:
         thread.start()
 
     Gtk.main()
-    return 0
+    return 75 if app.input_stream_closed else 0
 
 
 if __name__ == "__main__":

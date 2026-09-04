@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=VNC Watch
+Comment=Автоматически следить за подключениями x11vnc
+Exec=/bin/bash -c "exec \"\\$(dirname \"\\$1\")/autostart.sh\"" _ %k
+Icon=network-idle
+Terminal=false
+X-GNOME-Autostart-enabled=true
+X-MATE-Autostart-Delay=5
